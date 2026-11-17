@@ -1,0 +1,1355 @@
+# Rishavraj_project_sagemath
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RishavRaj | Diwali Edition - Mean Value & Rolle's Theorem</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #160419;
+      --bg-crimson: #2b071e;
+      --card-bg: rgba(43, 10, 38, 0.85);
+      --card-inner: rgba(25, 4, 24, 0.75);
+      --gold-bright: #ffd700;
+      --gold-warm: #fbbf24;
+      --saffron: #ff6b00;
+      --magenta: #ec4899;
+      --border-gold: rgba(251, 191, 36, 0.38);
+      --text-cream: #fffbeb;
+      --text-soft: #fde68a;
+      --emerald-festive: #34d399;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(255, 107, 0, 0.22) 0%, transparent 40%),
+        radial-gradient(circle at 85% 15%, rgba(236, 72, 153, 0.2) 0%, transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(251, 191, 36, 0.15) 0%, transparent 50%),
+        linear-gradient(180deg, #120317 0%, #260721 50%, #150318 100%);
+      color: var(--text-cream);
+      padding-bottom: 50px;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Floating Golden Sparkles Background */
+    .sparkle-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        radial-gradient(2px 2px at 40px 60px, #ffd700, transparent),
+        radial-gradient(2px 2px at 140px 180px, #ff9900, transparent),
+        radial-gradient(2.5px 2.5px at 260px 90px, #ffd700, transparent),
+        radial-gradient(1.5px 1.5px at 320px 260px, #fff, transparent),
+        radial-gradient(2px 2px at 80px 340px, #fbbf24, transparent);
+      background-size: 360px 380px;
+      animation: floatSparkles 18s linear infinite;
+      opacity: 0.55;
+    }
+
+    @keyframes floatSparkles {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 -380px; }
+    }
+
+    /* Decorative Top Marigold Toran Border */
+    .toran-bar {
+      height: 6px;
+      background: repeating-linear-gradient(
+        90deg,
+        #ffd700 0px,
+        #ffd700 18px,
+        #ff5500 18px,
+        #ff5500 36px,
+        #e11d48 36px,
+        #e11d48 54px
+      );
+      box-shadow: 0 2px 12px rgba(255, 165, 0, 0.6);
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-switcher {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(24, 4, 28, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-gold);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      box-shadow: 0 4px 25px rgba(255, 140, 0, 0.18);
+    }
+
+    .brand-name {
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--gold-bright);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-shadow: 0 0 12px rgba(255, 215, 0, 0.45);
+    }
+
+    .brand-badge {
+      background: linear-gradient(135deg, #ffd700, #ff5500);
+      color: #1a0318;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 900;
+      font-size: 0.85rem;
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.6);
+    }
+
+    .switch-btns {
+      display: flex;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 5px;
+      border-radius: 12px;
+      border: 1px solid var(--border-gold);
+    }
+
+    .switch-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #fcd34d;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .switch-btn.active-tab {
+      background: linear-gradient(135deg, #ffd700, #ff6b00);
+      color: #1f0419;
+      box-shadow: 0 3px 14px rgba(255, 165, 0, 0.5);
+    }
+
+    /* Main Wrapper */
+    .page-wrap {
+      position: relative;
+      z-index: 2;
+      max-width: 550px;
+      margin: 0 auto;
+      padding: 18px 14px;
+    }
+
+    /* Royal Diwali Card Styling */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border-radius: 18px;
+      padding: 22px 20px;
+      margin-bottom: 18px;
+      border: 1.5px solid var(--border-gold);
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        inset 0 0 20px rgba(251, 191, 36, 0.06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle Golden Corner Accent */
+    .card::before {
+      content: "✦";
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      color: rgba(255, 215, 0, 0.35);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    /* Glowing Diya Animation */
+    .diya-icon {
+      display: inline-block;
+      animation: flicker 1.8s infinite alternate ease-in-out;
+      filter: drop-shadow(0 0 8px #ff9900);
+    }
+
+    @keyframes flicker {
+      0% { transform: scale(1) rotate(-2deg); filter: drop-shadow(0 0 6px #ffd700); }
+      100% { transform: scale(1.1) rotate(2deg); filter: drop-shadow(0 0 14px #ff5500); }
+    }
+
+    /* ==========================================
+       PROJECT 1: MEAN VALUE THEOREM (DIWALI THEME)
+       ========================================== */
+    .mvt-hero-title {
+      font-family: 'Cinzel', serif;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #fff7cc, #ffd700, #ff8800);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      line-height: 1.25;
+      text-shadow: 0 2px 15px rgba(255, 165, 0, 0.25);
+    }
+
+    .mvt-hero-sub {
+      text-align: center;
+      color: #fde68a;
+      font-size: 0.94rem;
+      line-height: 1.55;
+      opacity: 0.92;
+    }
+
+    .mvt-author-tag {
+      text-align: center;
+      margin-top: 12px;
+      padding: 6px 14px;
+      display: inline-block;
+      width: 100%;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #ffd700;
+      background: rgba(255, 165, 0, 0.12);
+      border-radius: 50px;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .mvt-formula-card {
+      background: linear-gradient(145deg, rgba(62, 12, 51, 0.9), rgba(35, 6, 36, 0.95));
+      border: 1.5px solid #fbbf24;
+      text-align: center;
+    }
+
+    .mvt-formula-header {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #ffd700;
+      letter-spacing: 1.2px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    .mvt-fraction-box {
+      background: linear-gradient(135deg, #fffdf5, #fef3c7);
+      border-radius: 14px;
+      padding: 14px 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 1.38rem;
+      font-family: Georgia, serif;
+      font-weight: bold;
+      color: #450a0a;
+      box-shadow: 0 0 22px rgba(251, 191, 36, 0.4);
+      border: 2px solid #f59e0b;
+      margin-bottom: 16px;
+    }
+
+    .fraction {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      vertical-align: middle;
+    }
+
+    .fraction .num {
+      border-bottom: 2px solid #7c2d12;
+      padding: 0 6px 3px;
+    }
+
+    .fraction .den {
+      padding: 3px 6px 0;
+    }
+
+    .mvt-conditions-text {
+      font-size: 0.92rem;
+      color: #fef3c7;
+      line-height: 1.65;
+    }
+
+    .mvt-section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffd700;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(251, 191, 36, 0.25);
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.9rem;
+      color: #fde68a;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .mvt-select, .mvt-input {
+      width: 100%;
+      padding: 11px 13px;
+      font-size: 0.95rem;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 10px;
+      background: var(--card-inner);
+      color: #fffbeb;
+      margin-bottom: 14px;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .mvt-select option {
+      background: #220520;
+      color: #fffbeb;
+    }
+
+    .mvt-select:focus, .mvt-input:focus {
+      border-color: #ffd700;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+    }
+
+    .input-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mvt-btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 6px 0 18px;
+    }
+
+    .btn-solve {
+      background: linear-gradient(135deg, #ffd700, #ff6b00);
+      color: #1f0419;
+      border: none;
+      border-radius: 10px;
+      padding: 13px 10px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(255, 140, 0, 0.45);
+      transition: transform 0.2s;
+    }
+
+    .btn-solve:hover, .btn-animate-mvt:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-animate-mvt {
+      background: linear-gradient(135deg, #ec4899, #be123c);
+      color: #ffffff;
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      border-radius: 10px;
+      padding: 13px 10px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(236, 72, 153, 0.45);
+      transition: transform 0.2s;
+    }
+
+    .mvt-steps-container {
+      background: var(--card-inner);
+      border-radius: 12px;
+      border-left: 5px solid #ffd700;
+      padding: 16px;
+      border-top: 1px solid var(--border-gold);
+      border-right: 1px solid var(--border-gold);
+      border-bottom: 1px solid var(--border-gold);
+    }
+
+    .mvt-step-item {
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(251, 191, 36, 0.25);
+      font-size: 0.93rem;
+      line-height: 1.65;
+      color: #fffbeb;
+    }
+
+    .mvt-step-item:first-child {
+      padding-top: 0;
+    }
+
+    .mvt-step-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .step-heading {
+      color: #34d399;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .hl-badge {
+      background: linear-gradient(135deg, #fef08a, #fbbf24);
+      color: #450a0a;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.95rem;
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+    }
+
+    /* Warm Parchment Graph Box */
+    .graph-box {
+      width: 100%;
+      border: 2px solid #fbbf24;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fffdf7;
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 360px;
+    }
+
+    .mvt-legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 14px;
+      font-size: 0.85rem;
+      color: #fde68a;
+      font-weight: 600;
+    }
+
+    .leg-dot {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    /* ==========================================
+       PROJECT 2: ROLLE'S THEOREM (DIWALI THEME)
+       ========================================== */
+    .rolle-banner {
+      background: linear-gradient(135deg, #4a0424 0%, #9d174d 50%, #ea580c 100%);
+      color: #fffbeb;
+      text-align: center;
+      padding: 28px 16px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #ffd700;
+      box-shadow: 0 6px 25px rgba(234, 88, 12, 0.35);
+      position: relative;
+      z-index: 2;
+    }
+
+    .rolle-banner h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.95rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #ffd700;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      margin-bottom: 6px;
+    }
+
+    .rolle-banner p {
+      font-size: 0.95rem;
+      color: #fde68a;
+      font-weight: 500;
+    }
+
+    .rolle-card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.32rem;
+      font-weight: 700;
+      color: #ffd700;
+      margin-bottom: 14px;
+    }
+
+    .rolle-formula-highlight {
+      text-align: center;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #34d399;
+      background: var(--card-inner);
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      margin: 14px 0;
+      text-shadow: 0 0 10px rgba(52, 211, 153, 0.3);
+    }
+
+    .rolle-func-title {
+      text-align: center;
+      font-size: 1.28rem;
+      font-weight: 800;
+      color: #fbbf24;
+      background: var(--card-inner);
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border-gold);
+      margin-bottom: 18px;
+    }
+
+    .slider-block {
+      margin-bottom: 16px;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: #fde68a;
+      margin-bottom: 8px;
+    }
+
+    .slider-val-pill {
+      background: rgba(255, 215, 0, 0.18);
+      color: #ffd700;
+      padding: 1px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      border: 1px solid rgba(255, 215, 0, 0.4);
+    }
+
+    .rolle-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.15);
+      outline: none;
+    }
+
+    .rolle-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffd700, #ff5500);
+      border: 2px solid #fff;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(255, 165, 0, 0.8);
+    }
+
+    .rolle-btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .btn-rolle {
+      background: linear-gradient(135deg, #ffd700, #ff6b00);
+      color: #1f0419;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+      transition: transform 0.2s;
+    }
+
+    .btn-rolle:hover {
+      transform: translateY(-2px);
+    }
+
+    .rolle-legend {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #fde68a;
+    }
+
+    .rolle-calc-box {
+      background: var(--card-inner);
+      border: 1px solid var(--border-gold);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 0.95rem;
+      line-height: 1.95;
+      color: #fffbeb;
+    }
+
+    .rolle-verified {
+      color: #34d399;
+      font-weight: 800;
+      margin-top: 6px;
+      text-shadow: 0 0 10px rgba(52, 211, 153, 0.3);
+    }
+
+    .rolle-cond-list {
+      font-size: 0.98rem;
+      line-height: 2.1;
+      color: #fffbeb;
+    }
+
+    .project-footer {
+      text-align: center;
+      font-size: 0.92rem;
+      color: #ffd700;
+      font-weight: 700;
+      margin-top: 16px;
+      letter-spacing: 0.4px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Diwali Sparkles Background -->
+  <div class="sparkle-bg"></div>
+
+  <!-- Festive Marigold Toran Strip -->
+  <div class="toran-bar"></div>
+
+  <!-- Top Switcher Bar with RishavRaj Branding -->
+  <div class="top-switcher">
+    <div class="brand-name">
+      <span class="brand-badge">RR</span>
+      <span><span class="diya-icon">🪔</span> RishavRaj Maths Lab</span>
+    </div>
+    <div class="switch-btns">
+      <button class="switch-btn active-tab" id="tabMVT" onclick="switchProject('MVT')">Mean Value Theorem</button>
+      <button class="switch-btn" id="tabRolle" onclick="switchProject('ROLLE')">Rolle's Theorem</button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       VIEW 1: MEAN VALUE THEOREM (ROYAL DIWALI EDITION)
+       ========================================================= -->
+  <div id="mvtView" class="page-wrap">
+    <!-- Title Card -->
+    <div class="card">
+      <h1 class="mvt-hero-title"><span class="diya-icon">🪔</span> Mean Value<br>Theorem <span class="diya-icon">🪔</span></h1>
+      <p class="mvt-hero-sub">
+        Mathematical Formula, Step-by-Step Analytical Solution, and Interactive Graphical Proof
+      </p>
+      <div class="mvt-author-tag">✨ Festive Royal Edition | Created by RishavRaj ✨</div>
+    </div>
+
+    <!-- Formula Card -->
+    <div class="card mvt-formula-card">
+      <div class="mvt-formula-header">🎇 MAIN THEOREM FORMULA 🎇</div>
+      <div class="mvt-fraction-box">
+        <span>f'(c) =</span>
+        <span class="fraction">
+          <span class="num">f(b) &minus; f(a)</span>
+          <span class="den">b &minus; a</span>
+        </span>
+      </div>
+      <p class="mvt-conditions-text">
+        <strong>Conditions:</strong> If a function <em>f(x)</em> is <strong>continuous</strong> on the closed interval <strong>[a, b]</strong> and <strong>differentiable</strong> on the open interval <strong>(a, b)</strong>, then there exists at least one point <strong>c &isin; (a, b)</strong> where the tangent line is parallel to the secant line connecting (a, f(a)) and (b, f(b)).
+      </p>
+    </div>
+
+    <!-- 1. Problem & Step-by-Step Solution -->
+    <div class="card">
+      <h2 class="mvt-section-title">1. Problem &amp; Step-by-Step Solution</h2>
+
+      <label class="form-label">Select Function f(x):</label>
+      <select class="mvt-select" id="mvtFuncSelect" onchange="solveMVT()">
+        <option value="parabola">f(x) = x² (Simple Parabola)</option>
+        <option value="quadratic">f(x) = x² - 4x + 5 (Quadratic Function)</option>
+        <option value="cubic">f(x) = x³ - 3x + 2 (Cubic Function)</option>
+      </select>
+
+      <div class="input-grid-2">
+        <div>
+          <label class="form-label">Start Point (a):</label>
+          <input type="number" class="mvt-input" id="mvtA" value="1" step="0.5" oninput="solveMVT()" />
+        </div>
+        <div>
+          <label class="form-label">End Point (b):</label>
+          <input type="number" class="mvt-input" id="mvtB" value="4" step="0.5" oninput="solveMVT()" />
+        </div>
+      </div>
+
+      <div class="mvt-btn-row">
+        <button class="btn-solve" onclick="solveMVT()">✨ Solve</button>
+        <button class="btn-animate-mvt" id="mvtAnimBtn" onclick="animateMVTTangent()">Animate Tangent &#9654;</button>
+      </div>
+
+      <!-- Step-by-Step Solution Box -->
+      <div class="mvt-steps-container" id="mvtStepsBox">
+        <div class="mvt-step-item" id="mvtStep1"></div>
+        <div class="mvt-step-item" id="mvtStep2"></div>
+        <div class="mvt-step-item" id="mvtStep3"></div>
+        <div class="mvt-step-item" id="mvtStep4"></div>
+      </div>
+    </div>
+
+    <!-- 2. Graphical Representation -->
+    <div class="card">
+      <h2 class="mvt-section-title">2. Graphical Representation</h2>
+      <div class="graph-box">
+        <canvas id="mvtCanvas"></canvas>
+      </div>
+      <div class="mvt-legend">
+        <span><span class="leg-dot" style="background:#0284c7;"></span>Curve f(x)</span>
+        <span><span class="leg-dot" style="background:#ea580c;"></span>Secant Line AB</span>
+        <span><span class="leg-dot" style="background:#16a34a;"></span>Tangent at c</span>
+        <span><span class="leg-dot" style="background:#f59e0b;"></span>Point c</span>
+      </div>
+    </div>
+
+    <div class="project-footer">
+      🪔 Interactive Maths Project | Mean Value Theorem | By RishavRaj 🪔
+    </div>
+  </div>
+
+
+  <!-- =========================================================
+       VIEW 2: ROLLE'S THEOREM (ROYAL DIWALI EDITION)
+       ========================================================= -->
+  <div id="rolleView" class="hidden">
+    <!-- Top Festive Banner -->
+    <div class="rolle-banner">
+      <h1><span class="diya-icon">🪔</span> ROLLE'S THEOREM <span class="diya-icon">🪔</span></h1>
+      <p>Interactive Mathematics Animation | Festive Edition by RishavRaj</p>
+    </div>
+
+    <div class="page-wrap">
+      <!-- Mathematical Formula Card -->
+      <div class="card">
+        <h2 class="rolle-card-title">Mathematical Formula</h2>
+        <div class="rolle-formula-highlight">
+          f(a) = f(b) &rArr; f'(c) = 0
+        </div>
+        <p style="color:#fef3c7; line-height:1.65; font-size:0.95rem;">
+          If a function is continuous on [a,b], differentiable on (a,b), and f(a)=f(b), then at least one point c exists where the tangent is horizontal.
+        </p>
+      </div>
+
+      <!-- Change Function Values Card -->
+      <div class="card">
+        <h2 class="rolle-card-title">Change Function Values</h2>
+        <div class="rolle-func-title">f(x) = y₀ + k(x-a)(b-x)</div>
+
+        <div class="slider-block">
+          <label class="slider-label">
+            <span>Starting Point (a):</span>
+            <span class="slider-val-pill" id="lblRolleA">-1.5</span>
+          </label>
+          <input type="range" class="rolle-slider" id="rolleA" min="-4" max="1" step="0.5" value="-1.5" oninput="updateRolle()" />
+        </div>
+
+        <div class="slider-block">
+          <label class="slider-label">
+            <span>Ending Point (b):</span>
+            <span class="slider-val-pill" id="lblRolleB">4</span>
+          </label>
+          <input type="range" class="rolle-slider" id="rolleB" min="1.5" max="6" step="0.5" value="4" oninput="updateRolle()" />
+        </div>
+
+        <div class="slider-block">
+          <label class="slider-label">
+            <span>Curve Height (k):</span>
+            <span class="slider-val-pill" id="lblRolleK">1.6</span>
+          </label>
+          <input type="range" class="rolle-slider" id="rolleK" min="-2" max="2.5" step="0.1" value="1.6" oninput="updateRolle()" />
+        </div>
+
+        <div class="slider-block">
+          <label class="slider-label">
+            <span>Endpoint Height (y₀):</span>
+            <span class="slider-val-pill" id="lblRolleY0">0</span>
+          </label>
+          <input type="range" class="rolle-slider" id="rolleY0" min="-4" max="4" step="0.5" value="0" oninput="updateRolle()" />
+        </div>
+
+        <div class="rolle-btn-row">
+          <button class="btn-rolle" id="rollePlayBtn" onclick="animateRolle()">&#9654; Play Animation</button>
+          <button class="btn-rolle" onclick="resetRolle()">&#8635; Reset</button>
+        </div>
+      </div>
+
+      <!-- Live Graph Card -->
+      <div class="card">
+        <h2 class="rolle-card-title">Live Graph</h2>
+        <div class="graph-box">
+          <canvas id="rolleCanvas"></canvas>
+        </div>
+        <div class="rolle-legend">
+          <span style="color:#38bdf8; font-weight:700;">&bull; Blue:</span> Function Curve &nbsp;
+          <span style="color:#f87171; font-weight:700;">&bull; Red:</span> Rolle Point (c)<br>
+          <span style="color:#34d399; font-weight:700;">&mdash; Green:</span> Horizontal Tangent
+        </div>
+      </div>
+
+      <!-- Calculation and Result Card -->
+      <div class="card">
+        <h2 class="rolle-card-title">Calculation and Result</h2>
+        <div class="rolle-calc-box" id="rolleCalcBox"></div>
+      </div>
+
+      <!-- Conditions of Rolle's Theorem Card -->
+      <div class="card">
+        <h2 class="rolle-card-title">Conditions of Rolle's Theorem</h2>
+        <div class="rolle-cond-list">
+          <div><span style="color:#ffd700;">&#10003;</span> Continuous on [a,b]</div>
+          <div><span style="color:#ffd700;">&#10003;</span> Differentiable on (a,b)</div>
+          <div><span style="color:#ffd700;">&#10003;</span> f(a) = f(b)</div>
+          <div class="rolle-verified">🎆 All three conditions are satisfied!</div>
+        </div>
+      </div>
+
+      <div class="project-footer">
+        🪔 Interactive Maths Project | Rolle's Theorem | By RishavRaj 🪔
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =====================================================
+       SWITCH BETWEEN MVT AND ROLLE'S THEOREM
+       ===================================================== */
+    let activeProject = 'MVT';
+    let mvtAnimId = null;
+    let rolleAnimId = null;
+
+    function switchProject(mode) {
+      activeProject = mode;
+      const mvtView = document.getElementById('mvtView');
+      const rolleView = document.getElementById('rolleView');
+      const tabMVT = document.getElementById('tabMVT');
+      const tabRolle = document.getElementById('tabRolle');
+
+      if (mode === 'MVT') {
+        mvtView.classList.remove('hidden');
+        rolleView.classList.add('hidden');
+        tabMVT.className = 'switch-btn active-tab';
+        tabRolle.className = 'switch-btn';
+        solveMVT();
+      } else {
+        mvtView.classList.add('hidden');
+        rolleView.classList.remove('hidden');
+        tabMVT.className = 'switch-btn';
+        tabRolle.className = 'switch-btn active-tab';
+        updateRolle();
+      }
+    }
+
+    /* =====================================================
+       HELPER: DRAW WARM FESTIVE PARCHMENT GRAPH PAPER GRID
+       ===================================================== */
+    function drawGraphPaper(ctx, W, H, xMin, xMax, yMin, yMax) {
+      const toX = x => ((x - xMin) / (xMax - xMin)) * W;
+      const toY = y => H - ((y - yMin) / (yMax - yMin)) * H;
+
+      // Warm Royal Parchment Background
+      ctx.fillStyle = '#fffdf7';
+      ctx.fillRect(0, 0, W, H);
+
+      const xRange = xMax - xMin;
+      const yRange = yMax - yMin;
+      const xMajor = Math.max(1, Math.round(xRange / 8));
+      const yMajor = Math.max(1, Math.round(yRange / 8));
+      const xMinor = xMajor / 4;
+      const yMinor = yMajor / 4;
+
+      // Fine festive golden subdivision lines
+      ctx.strokeStyle = '#fef3c7';
+      ctx.lineWidth = 1;
+      for (let x = Math.floor(xMin / xMinor) * xMinor; x <= xMax; x += xMinor) {
+        const px = toX(x);
+        ctx.beginPath();
+        ctx.moveTo(px, 0);
+        ctx.lineTo(px, H);
+        ctx.stroke();
+      }
+      for (let y = Math.floor(yMin / yMinor) * yMinor; y <= yMax; y += yMinor) {
+        const py = toY(y);
+        ctx.beginPath();
+        ctx.moveTo(0, py);
+        ctx.lineTo(W, py);
+        ctx.stroke();
+      }
+
+      // Major golden grid lines
+      ctx.strokeStyle = '#fde68a';
+      ctx.lineWidth = 1;
+      for (let x = Math.floor(xMin / xMajor) * xMajor; x <= xMax; x += xMajor) {
+        const px = toX(x);
+        ctx.beginPath();
+        ctx.moveTo(px, 0);
+        ctx.lineTo(px, H);
+        ctx.stroke();
+      }
+      for (let y = Math.floor(yMin / yMajor) * yMajor; y <= yMax; y += yMajor) {
+        const py = toY(y);
+        ctx.beginPath();
+        ctx.moveTo(0, py);
+        ctx.lineTo(W, py);
+        ctx.stroke();
+      }
+
+      // Main X and Y Axes
+      ctx.strokeStyle = '#78350f';
+      ctx.lineWidth = 1.6;
+      if (yMin <= 0 && yMax >= 0) {
+        const y0 = toY(0);
+        ctx.beginPath();
+        ctx.moveTo(0, y0);
+        ctx.lineTo(W, y0);
+        ctx.stroke();
+      }
+      if (xMin <= 0 && xMax >= 0) {
+        const x0 = toX(0);
+        ctx.beginPath();
+        ctx.moveTo(x0, 0);
+        ctx.lineTo(x0, H);
+        ctx.stroke();
+      }
+
+      return { toX, toY };
+    }
+
+    /* =====================================================
+       PROJECT 1 LOGIC: MEAN VALUE THEOREM
+       ===================================================== */
+    let mvtState = {
+      fnKey: 'parabola',
+      a: 1,
+      b: 4,
+      fa: 1,
+      fb: 16,
+      slope: 5,
+      c: 2.5,
+      animX: null
+    };
+
+    function evalMVT(key, x) {
+      if (key === 'parabola') return x * x;
+      if (key === 'quadratic') return x * x - 4 * x + 5;
+      if (key === 'cubic') return x * x * x - 3 * x + 2;
+      return x * x;
+    }
+
+    function derivMVT(key, x) {
+      if (key === 'parabola') return 2 * x;
+      if (key === 'quadratic') return 2 * x - 4;
+      if (key === 'cubic') return 3 * x * x - 3;
+      return 2 * x;
+    }
+
+    function solveMVT() {
+      if (mvtAnimId) cancelAnimationFrame(mvtAnimId);
+      mvtState.animX = null;
+
+      const key = document.getElementById('mvtFuncSelect').value;
+      let a = parseFloat(document.getElementById('mvtA').value);
+      let b = parseFloat(document.getElementById('mvtB').value);
+
+      if (isNaN(a)) a = 1;
+      if (isNaN(b) || b <= a) b = a + 3;
+
+      const fa = evalMVT(key, a);
+      const fb = evalMVT(key, b);
+      const slope = (fb - fa) / (b - a);
+
+      let cVal = (a + b) / 2;
+      let fnLabel = 'x²';
+      let derivLabel = '2x';
+
+      if (key === 'parabola') {
+        fnLabel = 'x²';
+        derivLabel = '2x';
+        cVal = slope / 2;
+      } else if (key === 'quadratic') {
+        fnLabel = 'x² - 4x + 5';
+        derivLabel = '2x - 4';
+        cVal = (slope + 4) / 2;
+      } else if (key === 'cubic') {
+        fnLabel = 'x³ - 3x + 2';
+        derivLabel = '3x² - 3';
+        const val = Math.max(0, (slope + 3) / 3);
+        const rootPos = Math.sqrt(val);
+        const rootNeg = -Math.sqrt(val);
+        cVal = (rootPos > a && rootPos < b) ? rootPos : rootNeg;
+      }
+
+      mvtState = { fnKey: key, a, b, fa, fb, slope, c: cVal, animX: null };
+
+      // Populate 4 Steps
+      document.getElementById('mvtStep1').innerHTML =
+        `<span class="step-heading">Step 1 (Function &amp; Interval):</span>` +
+        `f(x) = ${fnLabel} is continuous on [${a}, ${b}] and differentiable on (${a}, ${b}).`;
+
+      document.getElementById('mvtStep2').innerHTML =
+        `<span class="step-heading">Step 2 (Evaluate f(a) and f(b)):</span>` +
+        `f(${a}) = <strong>${fa.toFixed(2)}</strong> | f(${b}) = <strong>${fb.toFixed(2)}</strong>`;
+
+      document.getElementById('mvtStep3').innerHTML =
+        `<span class="step-heading">Step 3 (Slope of Secant Line):</span>` +
+        `f'(c) = [f(${b}) &minus; f(${a})] / (${b} &minus; ${a}) = (${fb.toFixed(2)} &minus; ${fa.toFixed(2)}) / ${(b - a).toFixed(2)} = <span class="hl-badge">${slope.toFixed(2)}</span>`;
+
+      document.getElementById('mvtStep4').innerHTML =
+        `<span class="step-heading">Step 4 (Find Value of c):</span>` +
+        `Differentiating: f'(x) = ${derivLabel}<br>` +
+        `Setting f'(c) = ${slope.toFixed(2)}, we get <span class="hl-badge">c = ${cVal.toFixed(3)}</span> &isin; (${a}, ${b}).`;
+
+      drawMVTGraph();
+    }
+
+    function drawMVTGraph() {
+      const canvas = document.getElementById('mvtCanvas');
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const W = rect.width;
+      const H = rect.height;
+      const { fnKey, a, b, fa, fb, slope, c, animX } = mvtState;
+
+      const padX = Math.max((b - a) * 0.45, 1.5);
+      const xMin = Math.min(-0.8, a - padX);
+      const xMax = b + padX;
+
+      let yMin = Math.min(0, fa, fb);
+      let yMax = Math.max(0, fa, fb);
+      for (let i = 0; i <= 100; i++) {
+        const xv = xMin + (i / 100) * (xMax - xMin);
+        const yv = evalMVT(fnKey, xv);
+        if (yv < yMin) yMin = yv;
+        if (yv > yMax) yMax = yv;
+      }
+      const padY = Math.max((yMax - yMin) * 0.2, 2);
+      yMin -= padY;
+      yMax += padY;
+
+      const { toX, toY } = drawGraphPaper(ctx, W, H, xMin, xMax, yMin, yMax);
+
+      // 1. Function Curve f(x)
+      ctx.strokeStyle = '#0284c7';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let px = 0; px <= W; px += 2) {
+        const xv = xMin + (px / W) * (xMax - xMin);
+        const yv = evalMVT(fnKey, xv);
+        const py = toY(yv);
+        if (px === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // 2. Orange Dashed Secant Line AB
+      ctx.strokeStyle = '#ea580c';
+      ctx.lineWidth = 2.2;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      ctx.moveTo(toX(xMin), toY(fa + slope * (xMin - a)));
+      ctx.lineTo(toX(xMax), toY(fa + slope * (xMax - a)));
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // 3. Active tangent point
+      const activeX = animX !== null ? animX : c;
+      const activeY = evalMVT(fnKey, activeX);
+      const activeSlope = derivMVT(fnKey, activeX);
+      const span = (b - a) * 0.45;
+
+      // Golden vertical dashed drop line from c to x-axis
+      const yZero = toY(0);
+      ctx.strokeStyle = '#d97706';
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(toX(activeX), toY(activeY));
+      ctx.lineTo(toX(activeX), yZero);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Green Tangent Line at c
+      ctx.strokeStyle = '#16a34a';
+      ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(toX(activeX - span), toY(activeY - activeSlope * span));
+      ctx.lineTo(toX(activeX + span), toY(activeY + activeSlope * span));
+      ctx.stroke();
+
+      // Points A and B
+      [[a, fa, `A(${a}, ${fa.toFixed(1)})`], [b, fb, `B(${b}, ${fb.toFixed(1)})`]].forEach(([px, py, label]) => {
+        ctx.fillStyle = '#ea580c';
+        ctx.beginPath();
+        ctx.arc(toX(px), toY(py), 5.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#450a0a';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText(label, toX(px) + 6, toY(py) - 6);
+      });
+
+      // Diwali Diya Halo Glow around Point c
+      ctx.fillStyle = 'rgba(245, 158, 11, 0.28)';
+      ctx.beginPath();
+      ctx.arc(toX(activeX), toY(activeY), 13, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Golden Point c
+      ctx.fillStyle = '#f59e0b';
+      ctx.beginPath();
+      ctx.arc(toX(activeX), toY(activeY), 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#450a0a';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText(`c=${activeX.toFixed(2)}`, toX(activeX) + 8, toY(activeY) - 5);
+    }
+
+    function animateMVTTangent() {
+      if (mvtAnimId) cancelAnimationFrame(mvtAnimId);
+      const { a, b, c } = mvtState;
+      let progress = 0;
+
+      function step() {
+        progress += 0.014;
+        if (progress < 0.65) {
+          const t = progress / 0.65;
+          mvtState.animX = a + t * (b - a);
+          drawMVTGraph();
+          mvtAnimId = requestAnimationFrame(step);
+        } else if (progress < 1.0) {
+          const t = (progress - 0.65) / 0.35;
+          mvtState.animX = b + t * (c - b);
+          drawMVTGraph();
+          mvtAnimId = requestAnimationFrame(step);
+        } else {
+          mvtState.animX = null;
+          drawMVTGraph();
+        }
+      }
+      step();
+    }
+
+    /* =====================================================
+       PROJECT 2 LOGIC: ROLLE'S THEOREM
+       ===================================================== */
+    let rolleAnimX = null;
+
+    function updateRolle() {
+      if (rolleAnimId) cancelAnimationFrame(rolleAnimId);
+      rolleAnimX = null;
+      document.getElementById('rollePlayBtn').innerHTML = '&#9654; Play Animation';
+
+      const a = parseFloat(document.getElementById('rolleA').value);
+      const b = parseFloat(document.getElementById('rolleB').value);
+      const k = parseFloat(document.getElementById('rolleK').value);
+      const y0 = parseFloat(document.getElementById('rolleY0').value);
+
+      document.getElementById('lblRolleA').textContent = a;
+      document.getElementById('lblRolleB').textContent = b;
+      document.getElementById('lblRolleK').textContent = k;
+      document.getElementById('lblRolleY0').textContent = y0;
+
+      const c = (a + b) / 2;
+      const fa = y0;
+      const fb = y0;
+      const fc = y0 + k * (c - a) * (b - c);
+      const sumAB = (a + b).toFixed(1).replace('.0', '');
+
+      // Populate Calculation and Result card
+      document.getElementById('rolleCalcBox').innerHTML = `
+        <div><strong style="color:#ffd700;">Function:</strong> f(x) = ${y0} + ${k}(x - ${a})( ${b} - x)</div>
+        <div><strong style="color:#ffd700;">f(a):</strong> ${fa.toFixed(3)}</div>
+        <div><strong style="color:#ffd700;">f(b):</strong> ${fb.toFixed(3)}</div>
+        <div><strong style="color:#ffd700;">Rolle Point:</strong> c = (${a} + ${b}) / 2 = ${c.toFixed(3)}</div>
+        <div><strong style="color:#ffd700;">f(c):</strong> ${fc.toFixed(3)}</div>
+        <div><strong style="color:#ffd700;">Derivative:</strong> f'(x) = ${k}(${sumAB} - 2x)</div>
+        <div><strong style="color:#ffd700;">f'(c):</strong> 0</div>
+        <div class="rolle-verified">&#10003; Rolle's Theorem Verified!</div>
+      `;
+
+      drawRolleGraph();
+    }
+
+    function drawRolleGraph() {
+      const canvas = document.getElementById('rolleCanvas');
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const W = rect.width;
+      const H = rect.height;
+
+      const a = parseFloat(document.getElementById('rolleA').value);
+      const b = parseFloat(document.getElementById('rolleB').value);
+      const k = parseFloat(document.getElementById('rolleK').value);
+      const y0 = parseFloat(document.getElementById('rolleY0').value);
+
+      const f = x => y0 + k * (x - a) * (b - x);
+      const df = x => k * (a + b - 2 * x);
+
+      const c = (a + b) / 2;
+      const fc = f(c);
+
+      const xMin = Math.min(-6, a - 3);
+      const xMax = Math.max(8, b + 3);
+      const peakSpan = Math.max(Math.abs(fc - y0), 4);
+      const yMin = Math.min(y0, fc) - peakSpan * 0.65;
+      const yMax = Math.max(y0, fc) + peakSpan * 0.35;
+
+      const { toX, toY } = drawGraphPaper(ctx, W, H, xMin, xMax, yMin, yMax);
+
+      // Axis labels 'x' and 'y'
+      ctx.fillStyle = '#78350f';
+      ctx.font = 'bold 13px sans-serif';
+      ctx.fillText('y', toX(0) + 8, 18);
+      ctx.fillText('x', W - 18, toY(0) - 8);
+
+      // 1. Blue Function Curve
+      ctx.strokeStyle = '#1d63dc';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let px = 0; px <= W; px += 2) {
+        const xv = xMin + (px / W) * (xMax - xMin);
+        const yv = f(xv);
+        const py = toY(yv);
+        if (px === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // 2. Active Point (Rolle Point c or Animated Sweeping Point)
+      const ptX = rolleAnimX !== null ? rolleAnimX : c;
+      const ptY = f(ptX);
+      const slope = df(ptX);
+      const tanSpan = (b - a) * 0.48;
+
+      // Green Dashed Tangent Line
+      ctx.strokeStyle = '#16a34a';
+      ctx.lineWidth = 2.4;
+      ctx.setLineDash([6, 5]);
+      ctx.beginPath();
+      ctx.moveTo(toX(ptX - tanSpan), toY(ptY - slope * tanSpan));
+      ctx.lineTo(toX(ptX + tanSpan), toY(ptY + slope * tanSpan));
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // 3. Green Endpoints a and b
+      [[a, y0, 'a'], [b, y0, 'b']].forEach(([px, py, lbl]) => {
+        ctx.fillStyle = '#0d9467';
+        ctx.beginPath();
+        ctx.arc(toX(px), toY(py), 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#0d9467';
+        ctx.font = 'bold 14px sans-serif';
+        ctx.fillText(lbl, toX(px) + 8, toY(py) - 8);
+      });
+
+      // Festive Golden Halo around Red Rolle Point (c)
+      ctx.fillStyle = 'rgba(220, 38, 38, 0.22)';
+      ctx.beginPath();
+      ctx.arc(toX(ptX), toY(ptY), 14, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 4. Red Rolle Point (c)
+      ctx.fillStyle = '#dc2626';
+      ctx.beginPath();
+      ctx.arc(toX(ptX), toY(ptY), 6.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#dc2626';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText('c', toX(ptX) + 8, toY(ptY) - 10);
+    }
+
+    function animateRolle() {
+      if (rolleAnimId) {
+        cancelAnimationFrame(rolleAnimId);
+        rolleAnimId = null;
+        rolleAnimX = null;
+        document.getElementById('rollePlayBtn').innerHTML = '&#9654; Play Animation';
+        drawRolleGraph();
+        return;
+      }
+
+      const a = parseFloat(document.getElementById('rolleA').value);
+      const b = parseFloat(document.getElementById('rolleB').value);
+      const c = (a + b) / 2;
+      let progress = 0;
+      document.getElementById('rollePlayBtn').innerHTML = '&#9208; Pause';
+
+      function step() {
+        progress += 0.012;
+        if (progress < 0.7) {
+          const t = progress / 0.7;
+          rolleAnimX = a + t * (b - a);
+          drawRolleGraph();
+          rolleAnimId = requestAnimationFrame(step);
+        } else if (progress < 1.0) {
+          const t = (progress - 0.7) / 0.3;
+          rolleAnimX = b + t * (c - b);
+          drawRolleGraph();
+          rolleAnimId = requestAnimationFrame(step);
+        } else {
+          rolleAnimX = null;
+          rolleAnimId = null;
+          document.getElementById('rollePlayBtn').innerHTML = '&#9654; Play Animation';
+          drawRolleGraph();
+        }
+      }
+      step();
+    }
+
+    function resetRolle() {
+      if (rolleAnimId) cancelAnimationFrame(rolleAnimId);
+      rolleAnimId = null;
+      rolleAnimX = null;
+      document.getElementById('rolleA').value = -1.5;
+      document.getElementById('rolleB').value = 4;
+      document.getElementById('rolleK').value = 1.6;
+      document.getElementById('rolleY0').value = 0;
+      updateRolle();
+    }
+
+    window.addEventListener('resize', () => {
+      if (activeProject === 'MVT') drawMVTGraph();
+      else drawRolleGraph();
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      solveMVT();
+    });
+  </script>
+</body>
+</html>

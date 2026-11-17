@@ -1,1 +1,0 @@
-# Rishavraj_project_sagemath
